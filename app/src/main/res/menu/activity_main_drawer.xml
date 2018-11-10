@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/baseline_home_black_24"
+            android:title="Inicio" />
+
+        <item
+            android:id="@+id/buscar"
+            android:icon="@drawable/baseline_search_black_24"
+            android:title="Buscar" />
+
+        <item
+            android:id="@+id/favoritos"
+            android:icon="@drawable/baseline_favorite_black_24"
+            android:title="Favoritos"
+            android:visible="false"/>
+
+        <item android:title="Sistema">
+            <menu>
+                <item
+                    android:id="@+id/config"
+                    android:icon="@drawable/config_24"
+                    android:title="Configuracion" />
+                <item
+                    android:id="@+id/login"
+                    android:icon="@drawable/lock"
+                    android:title="Login" />
+                <item
+                    android:id="@+id/logout"
+                    android:icon="@drawable/unlock"
+                    android:title="Logout" />
+                <item
+                    android:id="@+id/terms"
+                    android:icon="@drawable/terms_and_conditions_24"
+                    android:title="Terminos y condiciones" />
+                <item
+                    android:id="@+id/help"
+                    android:icon="@drawable/baseline_contact_support_black_24dp"
+                    android:title="Ayuda" />
+            </menu>
+        </item>
+    </group>
+</menu>
