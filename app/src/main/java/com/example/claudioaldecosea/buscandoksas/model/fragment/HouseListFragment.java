@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,17 +33,25 @@ public class HouseListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout =  inflater.inflate(R.layout.home_fragment_house_list, container, false);
+        View layout = inflater.inflate(R.layout.home_fragment_house_list, container, false);
         //Obtengo la referencia a la recycleView que lista las casas en la home
         mHouseListRecycleView = layout.findViewById(R.id.houses_recycle_view);
 
         RecycleViewClickListener recycleViewListener = new RecycleViewClickListener() {
             @Override
             public void onClick(View v, int pos) {
-                Intent intent = new Intent(v.getContext(), HouseDetailActivity.class);
+                Bundle bundle = new Bundle();
                 House currentHouse = mHousesList.get(pos);
-                intent.putExtra(HouseDetailActivity.EXTRA_DATA, currentHouse);
-                startActivity(intent);
+                bundle.putParcelable(HouseDetail.EXTRA_DATA, currentHouse);
+
+                HouseDetail houseDetail = new HouseDetail();
+                houseDetail.setArguments(bundle);
+
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.home_fragments_container, houseDetail)
+                        .addToBackStack(null)
+                        .commit();
             }
         };
 
