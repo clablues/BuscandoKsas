@@ -1,39 +1,22 @@
 package com.example.claudioaldecosea.buscandoksas;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.example.claudioaldecosea.buscandoksas.domain.House;
-import com.example.claudioaldecosea.buscandoksas.model.adapter.HouseListAdapter;
-import com.example.claudioaldecosea.buscandoksas.model.adapter.RecycleViewClickListener;
-import com.example.claudioaldecosea.buscandoksas.model.asynctask.GetHousesAsyncTask;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.FacebookLoginFragment;
-import com.example.claudioaldecosea.buscandoksas.model.fragment.FacebookLoginListener;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.HelpVideo;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.HouseListFragment;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.TermsAndConditions;
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FacebookLoginListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FacebookLoginFragment.FacebookLoginListener {
 
     private Toolbar toolBar;
     private DrawerLayout drawer;

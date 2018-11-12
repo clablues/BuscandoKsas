@@ -15,7 +15,6 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -113,4 +112,18 @@ public class FacebookLoginFragment extends Fragment {
         super.onDestroy();
         accessTokenTracker.stopTracking();
     }
+
+    public interface FacebookLoginListener {
+
+        boolean isFacebookLoggedIn();
+
+        void showFavorites();
+
+        void hideFavorites();
+
+        void showLogin();
+
+        void showLogout();
+    }
+
 }
