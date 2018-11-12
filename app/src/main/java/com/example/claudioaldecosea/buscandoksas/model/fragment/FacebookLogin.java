@@ -18,7 +18,7 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-public class FacebookLoginFragment extends Fragment {
+public class FacebookLogin extends Fragment {
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     private FacebookLoginListener facebookListener;

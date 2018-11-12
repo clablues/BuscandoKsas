@@ -16,4 +16,6 @@
     <string name="banos">Baños:</string>
     <string name="garage">Garage:</string>
     <string name="parrillero">Parrillero:</string>
+    <string name="search_title">search</string>
+    <string name="filter_search">filter</string>
 </resources>

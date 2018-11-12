@@ -20,12 +20,12 @@ import com.example.claudioaldecosea.buscandoksas.model.asynctask.GetHousesAsyncT
 
 import java.util.ArrayList;
 
-public class HouseListFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<House>> {
+public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<House>> {
     private RecyclerView mHouseListRecycleView;
     private HouseListAdapter mHouseListAdapter;
     private ArrayList<House> mHousesList = new ArrayList<>();
 
-    public HouseListFragment() {
+    public HouseList() {
     }
 
     @Override

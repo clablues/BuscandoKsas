@@ -1,22 +1,27 @@
 package com.example.claudioaldecosea.buscandoksas;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
-import com.example.claudioaldecosea.buscandoksas.model.fragment.FacebookLoginFragment;
+import com.example.claudioaldecosea.buscandoksas.model.fragment.FacebookLogin;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.HelpVideo;
-import com.example.claudioaldecosea.buscandoksas.model.fragment.HouseListFragment;
+import com.example.claudioaldecosea.buscandoksas.model.fragment.HouseList;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.TermsAndConditions;
 import com.facebook.AccessToken;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FacebookLoginFragment.FacebookLoginListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FacebookLogin.FacebookLoginListener {
 
     private Toolbar toolBar;
     private DrawerLayout drawer;
@@ -48,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             showLogin();
         }
 
-        getSupportFragmentManager().beginTransaction().add(R.id.home_fragments_container, new HouseListFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.home_fragments_container, new HouseList()).commit();
     }
 
     @Override
@@ -66,15 +71,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (menuItem.getItemId()) {
             case R.id.login:
-                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new FacebookLoginFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new FacebookLogin()).addToBackStack(null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.logout:
-                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new FacebookLoginFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new FacebookLogin()).addToBackStack(null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new HouseListFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new HouseList()).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.terms:
@@ -98,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void showFavorites() {
-        //Controlo por las dudas que este logeado aunque en principio me van a llamar desde el onSuccess del FacebookLoginFragment
+        //Controlo por las dudas que este logeado aunque en principio me van a llamar desde el onSuccess del FacebookLogin
         MenuItem favoritos = navigationView.getMenu().findItem(R.id.favoritos);
         favoritos.setVisible(true);
         //TODO Ver si con esto refresco el menu
@@ -107,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void hideFavorites() {
-        //Controlo por las dudas que este logeado aunque en principio me van a llamar desde el onSuccess del FacebookLoginFragment
+        //Controlo por las dudas que este logeado aunque en principio me van a llamar desde el onSuccess del FacebookLogin
         MenuItem favoritos = navigationView.getMenu().findItem(R.id.favoritos);
         favoritos.setVisible(false);
         navigationView.refreshDrawableState();
@@ -138,5 +143,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_bar_menu, menu);
+
+        return true;
     }
 }
