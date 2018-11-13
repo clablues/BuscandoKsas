@@ -30,10 +30,8 @@ public class NetworkUtil {
         this.BASE_URL = BASE_URL;
     }
 
-    public ArrayList<House> getHouses() {
-        //ArrayList<House> result = new ArrayList<>();
+    public ArrayList<House> getHouses(String postData) {
         Houses houses = new Houses();
-        String postData = "{\"MaxResults\":10,\"Barrio\":\"\",\"Precio\":\"\",\"CantDormitorio\":\"\",\"TieneParrillero\":\"\",\"TieneGarage\":\"\",\"TieneBalcon\":\"\",\"TienePatio\":\"\"}";
 
         try {
             //agregar los parametros a la URL
@@ -46,7 +44,7 @@ public class NetworkUtil {
             //en este caso el metodo es POST
             urlConnection.setRequestMethod("POST");
             String authorization = "123456";
-            urlConnection.setRequestProperty("auth", authorization);
+            urlConnection.setRequestProperty("Authorization", authorization);
             urlConnection.setRequestProperty("Content-Type","application/json");
             urlConnection.setDoOutput(true);
             urlConnection.getOutputStream().write(postData.getBytes());

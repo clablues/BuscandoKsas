@@ -1,19 +1,15 @@
 package com.example.claudioaldecosea.buscandoksas;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.example.claudioaldecosea.buscandoksas.model.fragment.FacebookLogin;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.HelpVideo;
@@ -26,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolBar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private static final String MODE_HOME = "home";
+    private static final String MODE_FAVORITES = "favorites";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +47,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             MenuItem favoritos = navigationView.getMenu().findItem(R.id.favoritos);
             favoritos.setVisible(true);
             showLogout();
-        }else{
+        } else {
             showLogin();
         }
 
-        getSupportFragmentManager().beginTransaction().add(R.id.home_fragments_container, new HouseList()).commit();
+        Bundle bundle = new Bundle();
+        bundle.putString("mode", MODE_HOME);
+        HouseList houseList = new HouseList();
+        houseList.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction().add(R.id.home_fragments_container, houseList).commit();
     }
 
     @Override
@@ -78,10 +81,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new FacebookLogin()).addToBackStack(null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
-            case R.id.home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new HouseList()).commit();
+            case R.id.home: {
+                Bundle bundle = new Bundle();
+                bundle.putString("mode", MODE_HOME);
+                HouseList houseList = new HouseList();
+                houseList.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, houseList).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
+            }
             case R.id.terms:
                 getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new TermsAndConditions()).addToBackStack(null).commit();
                 drawer.closeDrawer(GravityCompat.START);
@@ -90,6 +98,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, new HelpVideo()).addToBackStack(null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
+            case R.id.favoritos: {
+                Bundle bundle = new Bundle();
+                bundle.putString("mode", MODE_FAVORITES);
+                HouseList houseList = new HouseList();
+                houseList.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, houseList).commit();
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
             default:
                 return true;
         }
@@ -106,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Controlo por las dudas que este logeado aunque en principio me van a llamar desde el onSuccess del FacebookLogin
         MenuItem favoritos = navigationView.getMenu().findItem(R.id.favoritos);
         favoritos.setVisible(true);
-        //TODO Ver si con esto refresco el menu
         navigationView.refreshDrawableState();
     }
 
@@ -149,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_bar_menu, menu);
-
         return true;
     }
 }

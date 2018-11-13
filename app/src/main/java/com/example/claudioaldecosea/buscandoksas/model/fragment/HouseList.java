@@ -24,6 +24,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     private RecyclerView mHouseListRecycleView;
     private HouseListAdapter mHouseListAdapter;
     private ArrayList<House> mHousesList = new ArrayList<>();
+    private String mode = "";
 
     public HouseList() {
     }
@@ -33,6 +34,12 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
         View layout = inflater.inflate(R.layout.home_fragment_house_list, container, false);
         //Obtengo la referencia a la recycleView que lista las casas en la home
         mHouseListRecycleView = layout.findViewById(R.id.houses_recycle_view);
+
+        Bundle bundle = this.getArguments();
+
+        if(bundle != null){
+            mode = this.getArguments().getString("mode");
+        }
 
         RecycleViewClickListener recycleViewListener = new RecycleViewClickListener() {
             @Override
@@ -87,7 +94,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     @NonNull
     @Override
     public Loader<ArrayList<House>> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new GetHousesAsyncTask(getContext());
+        return new GetHousesAsyncTask(getContext(),mode);
     }
 
     @Override

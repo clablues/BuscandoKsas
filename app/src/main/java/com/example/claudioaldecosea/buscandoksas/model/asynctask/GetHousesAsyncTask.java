@@ -11,16 +11,41 @@ import java.util.ArrayList;
 
 public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
 
-    public GetHousesAsyncTask(Context context) {
+    private String mode;
+    private static final String BUSCAR_INMUEBLES = "http://173.233.86.183:8080/CursoAndroidWebApp/rest/buscarInmueble";
+    private static final String LISTADO_FAVORITOS = "http://173.233.86.183:8080/CursoAndroidWebApp/rest/listadoFavoritos";
+    private static final String MODE_HOME = "home";
+    private static final String MODE_FAVORITES = "favorites";
+
+    public GetHousesAsyncTask(Context context, String mode) {
         super(context);
+        this.mode = mode;
     }
 
     @Override
     public ArrayList<House> loadInBackground() {
-        String url = "http://173.233.86.183:8080/CursoAndroidWebApp/rest/buscarInmueble";
-        NetworkUtil netUtils = new NetworkUtil(url);
-        ArrayList<House> houses = netUtils.getHouses();
-        return houses;
+        switch (mode) {
+            case MODE_HOME: {
+                NetworkUtil netUtils = new NetworkUtil(BUSCAR_INMUEBLES);
+                String postData = "{\"MaxResults\":10,\"Barrio\":\"\",\"Precio\":\"\",\"CantDormitorio\":\"\",\"TieneParrillero\":\"\",\"TieneGarage\":\"\",\"TieneBalcon\":\"\",\"TienePatio\":\"\"}";
+                ArrayList<House> houses = netUtils.getHouses(postData);
+                return houses;
+            }
+
+            case MODE_FAVORITES: {
+                String postData = "{}";
+                NetworkUtil netUtils = new NetworkUtil(LISTADO_FAVORITOS);
+                ArrayList<House> houses = netUtils.getHouses(postData);
+                return houses;
+            }
+
+            default: {
+                NetworkUtil netUtils = new NetworkUtil(BUSCAR_INMUEBLES);
+                String postData = "{\"MaxResults\":10,\"Barrio\":\"\",\"Precio\":\"\",\"CantDormitorio\":\"\",\"TieneParrillero\":\"\",\"TieneGarage\":\"\",\"TieneBalcon\":\"\",\"TienePatio\":\"\"}";
+                ArrayList<House> houses = netUtils.getHouses(postData);
+                return houses;
+            }
+        }
     }
 
     @Override
