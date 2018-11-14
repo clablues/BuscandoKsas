@@ -18,4 +18,5 @@
     <string name="parrillero">Parrillero:</string>
     <string name="search_title">search</string>
     <string name="filter_search">filter</string>
+    <string name="favorites_title">Favorites</string>
 </resources>

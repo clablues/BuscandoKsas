@@ -9,6 +9,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,6 +38,8 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
         mHouseListRecycleView = layout.findViewById(R.id.houses_recycle_view);
 
         Bundle bundle = this.getArguments();
+
+        setHasOptionsMenu(true);
 
         if(bundle != null){
             mode = this.getArguments().getString("mode");
@@ -110,4 +114,11 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     public void onLoaderReset(@NonNull Loader<ArrayList<House>> loader) {
 
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.activity_bar_menu_house_list, menu);
+    }
+
 }

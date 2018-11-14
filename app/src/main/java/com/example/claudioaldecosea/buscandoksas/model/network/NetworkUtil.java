@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.claudioaldecosea.buscandoksas.domain.House;
 import com.example.claudioaldecosea.buscandoksas.domain.Houses;
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
@@ -32,10 +33,30 @@ public class NetworkUtil {
 
     public ArrayList<House> getHouses(String postData) {
         Houses houses = new Houses();
+        String result = doPost(BASE_URL,postData);
 
+        Gson gson = new Gson();
+        houses = gson.fromJson(result, Houses.class);
+
+        return houses.getResponse();
+    }
+
+    public Boolean addToFavorites(String postData) {
+        Gson gson = new Gson();
+        String response = doPost(BASE_URL,postData);
+        Object result = gson.fromJson(response,Object.class);
+        if(((LinkedTreeMap) result).get("Resultado").equals("OK")){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public String doPost(String url, String postData) {
+        String response = "";
         try {
             //agregar los parametros a la URL
-            String finalURL = String.format(BASE_URL);
+            String finalURL = String.format(url);
             Uri builtURI = Uri.parse(finalURL).buildUpon().build();
             URL requestURL = new URL(builtURI.toString());
 
@@ -45,7 +66,7 @@ public class NetworkUtil {
             urlConnection.setRequestMethod("POST");
             String authorization = "123456";
             urlConnection.setRequestProperty("Authorization", authorization);
-            urlConnection.setRequestProperty("Content-Type","application/json");
+            urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setDoOutput(true);
             urlConnection.getOutputStream().write(postData.getBytes());
             urlConnection.connect();
@@ -55,14 +76,11 @@ public class NetworkUtil {
             //reader = new BufferedReader(new InputStreamReader(inputStream));
 
             StringBuilder sb = new StringBuilder();
-            for (int c; (c = reader.read()) >= 0;)
-                sb.append((char)c);
+            for (int c; (c = reader.read()) >= 0; )
+                sb.append((char) c);
 
-            String response = sb.toString();
-
-            Gson gson = new Gson();
-
-            houses = gson.fromJson(response, Houses.class);
+            response = sb.toString();
+            return response;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,6 +98,6 @@ public class NetworkUtil {
             }
         }
 
-        return houses.getResponse();
+        return response;
     }
 }

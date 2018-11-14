@@ -4,10 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,6 +24,7 @@ import com.example.claudioaldecosea.buscandoksas.domain.Habitaciones;
 import com.example.claudioaldecosea.buscandoksas.domain.House;
 import com.example.claudioaldecosea.buscandoksas.model.adapter.HouseDetailAdapter;
 import com.example.claudioaldecosea.buscandoksas.model.adapter.RecycleViewClickListener;
+import com.example.claudioaldecosea.buscandoksas.model.asynctask.AddToFavoritesAsyncTask;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -25,7 +33,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class HouseDetail extends Fragment implements OnMapReadyCallback {
+public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<Boolean> {
 
     public static String EXTRA_DATA = "extra_data";
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -44,6 +52,7 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap gmap;
+    private Menu menu;
 
     private OnFragmentInteractionListener mListener;
 
@@ -56,6 +65,8 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_house_detail, container, false);
+
+        setHasOptionsMenu(true);
 
         Bundle bundle = this.getArguments();
 
@@ -206,6 +217,73 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback {
                 .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                 .build();                   // Creates a CameraPosition from the builder
         gmap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        this.menu = menu;
+        inflater.inflate(R.menu.activity_bar_menu_house_detail, menu);
+        if (mData.getFavorito().equals("true")){
+            MenuItem isFavorite = menu.findItem(R.id.got_favorites_bar);
+            MenuItem addFavorite = menu.findItem(R.id.add_favorites_bar);
+            isFavorite.setVisible(true);
+            addFavorite.setVisible(false);
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add_favorites_bar:
+                //Aca lo agrego a favoritos
+                item.setVisible(false);
+                MenuItem isFavorite = menu.findItem(R.id.got_favorites_bar);
+                isFavorite.setVisible(true);
+                startTask();
+                return true;
+            case R.id.got_favorites_bar:
+                //Aca lo saco de favoritos
+                item.setVisible(false);
+                MenuItem addFavorite = menu.findItem(R.id.add_favorites_bar);
+                addFavorite.setVisible(true);
+                startTask();
+                return true;
+            default:
+                break;
+        }
+
+        return false;
+    }
+
+    //***************** Loader interface implementation **************************
+
+    private void startTask() {
+        Bundle queryBundle = new Bundle();
+        getActivity().getSupportLoaderManager().restartLoader(0, queryBundle, this);
+    }
+
+
+    @NonNull
+    @Override
+    public Loader<Boolean> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return new AddToFavoritesAsyncTask(getContext(), Integer.valueOf(mData.getInmuebleId()));
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Boolean> loader, Boolean addedToFavorites) {
+        //En caso de fallar el agregado a favoritos, vuelvo a quitar el corazon de favoritos
+        if (!addedToFavorites){
+            MenuItem isFavorite = menu.findItem(R.id.got_favorites_bar);
+            isFavorite.setVisible(false);
+            MenuItem addFavorite = menu.findItem(R.id.add_favorites_bar);
+            addFavorite.setVisible(true);
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Boolean> loader) {
 
     }
 }
