@@ -8,17 +8,17 @@
         <item
             android:id="@+id/home"
             android:icon="@drawable/baseline_home_black_24"
-            android:title="Inicio" />
+            android:title="@string/inicio" />
 
         <item
             android:id="@+id/buscar"
             android:icon="@drawable/baseline_search_black_24"
-            android:title="Buscar" />
+            android:title="@string/buscar" />
 
         <item
             android:id="@+id/favoritos"
             android:icon="@drawable/baseline_favorite_black_24"
-            android:title="Favoritos"
+            android:title="@string/favoritos"
             android:visible="false"/>
 
         <item android:title="Sistema">
@@ -26,23 +26,23 @@
                 <item
                     android:id="@+id/config"
                     android:icon="@drawable/config_24"
-                    android:title="Configuracion" />
+                    android:title="@string/configuracion" />
                 <item
                     android:id="@+id/login"
                     android:icon="@drawable/lock"
-                    android:title="Login" />
+                    android:title="@string/login" />
                 <item
                     android:id="@+id/logout"
                     android:icon="@drawable/unlock"
-                    android:title="Logout" />
+                    android:title="@string/logout" />
                 <item
                     android:id="@+id/terms"
                     android:icon="@drawable/terms_and_conditions_24"
-                    android:title="Terminos y condiciones" />
+                    android:title="@string/terms" />
                 <item
                     android:id="@+id/help"
                     android:icon="@drawable/baseline_contact_support_black_24dp"
-                    android:title="Ayuda" />
+                    android:title="@string/ayuda" />
             </menu>
         </item>
     </group>

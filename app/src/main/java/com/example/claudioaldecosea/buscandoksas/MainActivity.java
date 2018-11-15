@@ -1,5 +1,6 @@
 package com.example.claudioaldecosea.buscandoksas;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -107,10 +108,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
+            case R.id.config:
+                //startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setClassName("com.android.settings", "com.android.settings.LanguageSettings");
+                startActivity(intent);
+                return true;
             default:
                 return true;
         }
+
     }
+
 
     public boolean isFacebookLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -160,13 +169,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_bar_menu_house_list, menu);
-        return true;
-    }
-    */
 }

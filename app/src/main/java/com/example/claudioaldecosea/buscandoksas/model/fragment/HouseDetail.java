@@ -54,6 +54,8 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
     private GoogleMap gmap;
     private Menu menu;
 
+    private FacebookLogin.FacebookLoginListener facebookListener;
+
     private OnFragmentInteractionListener mListener;
 
     public HouseDetail() {
@@ -202,6 +204,17 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FacebookLogin.FacebookLoginListener) {
+            facebookListener = (FacebookLogin.FacebookLoginListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FacebookLoginListener");
+        }
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         gmap = googleMap;
 
@@ -221,13 +234,15 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        this.menu = menu;
-        inflater.inflate(R.menu.activity_bar_menu_house_detail, menu);
-        if (mData.getFavorito().equals("true")){
-            MenuItem isFavorite = menu.findItem(R.id.got_favorites_bar);
-            MenuItem addFavorite = menu.findItem(R.id.add_favorites_bar);
-            isFavorite.setVisible(true);
-            addFavorite.setVisible(false);
+        if(facebookListener.isFacebookLoggedIn()) {
+            this.menu = menu;
+            inflater.inflate(R.menu.activity_bar_menu_house_detail, menu);
+            if (mData.getFavorito().equals("true")) {
+                MenuItem isFavorite = menu.findItem(R.id.got_favorites_bar);
+                MenuItem addFavorite = menu.findItem(R.id.add_favorites_bar);
+                isFavorite.setVisible(true);
+                addFavorite.setVisible(false);
+            }
         }
     }
 
