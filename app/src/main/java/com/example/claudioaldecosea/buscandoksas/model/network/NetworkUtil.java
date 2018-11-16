@@ -53,7 +53,7 @@ public class NetworkUtil {
     }
 
     public String doPost(String url, String postData) {
-        String response = "";
+        String response = "{}";
         try {
             //agregar los parametros a la URL
             String finalURL = String.format(url);
@@ -83,7 +83,7 @@ public class NetworkUtil {
             return response;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -94,7 +94,7 @@ public class NetworkUtil {
             try {
                 reader.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
 
