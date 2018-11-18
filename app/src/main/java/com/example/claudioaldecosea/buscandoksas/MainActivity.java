@@ -1,6 +1,7 @@
 package com.example.claudioaldecosea.buscandoksas;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,8 +13,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.claudioaldecosea.buscandoksas.domain.House;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.FacebookLogin;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.HelpVideo;
+import com.example.claudioaldecosea.buscandoksas.model.fragment.HouseDetail;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.HouseList;
 import com.example.claudioaldecosea.buscandoksas.model.fragment.TermsAndConditions;
 import com.facebook.AccessToken;
@@ -57,7 +60,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HouseList houseList = new HouseList();
         houseList.setArguments(bundle);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.home_fragments_container, houseList).commit();
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getSupportFragmentManager().beginTransaction().add(R.id.house_list_land_fragment, houseList).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().add(R.id.home_fragments_container, houseList).commit();
+        }
     }
 
     @Override
@@ -109,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             }
             case R.id.config:
-                //startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.setClassName("com.android.settings", "com.android.settings.LanguageSettings");
                 startActivity(intent);

@@ -1,9 +1,13 @@
 package com.example.claudioaldecosea.buscandoksas.model.fragment;
 
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.claudioaldecosea.buscandoksas.R;
 import com.example.claudioaldecosea.buscandoksas.domain.House;
@@ -27,6 +32,8 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     private HouseListAdapter mHouseListAdapter;
     private ArrayList<House> mHousesList = new ArrayList<>();
     private String mode = "";
+    boolean isDualPane;
+    int mSelectedPosition = 0;
 
     public HouseList() {
     }
@@ -41,7 +48,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
 
         setHasOptionsMenu(true);
 
-        if(bundle != null){
+        if (bundle != null) {
             mode = this.getArguments().getString("mode");
         }
 
@@ -55,11 +62,15 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
                 HouseDetail houseDetail = new HouseDetail();
                 houseDetail.setArguments(bundle);
 
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.home_fragments_container, houseDetail)
-                        .addToBackStack(null)
-                        .commit();
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.house_detail_land_fragment, houseDetail).commit();
+                }else {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.home_fragments_container, houseDetail)
+                            .addToBackStack(null)
+                            .commit();
+                }
             }
         };
 
@@ -98,7 +109,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     @NonNull
     @Override
     public Loader<ArrayList<House>> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new GetHousesAsyncTask(getContext(),mode);
+        return new GetHousesAsyncTask(getContext(), mode);
     }
 
     @Override
@@ -120,5 +131,4 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
         menu.clear();
         inflater.inflate(R.menu.activity_bar_menu_house_list, menu);
     }
-
 }
