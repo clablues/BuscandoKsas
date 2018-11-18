@@ -1,0 +1,28 @@
+<resources>
+    <string name="facebook_app_id">2004900292925695</string>
+    <string name="fb_login_protocol_scheme">fb2004900292925695</string>
+
+    <string name="app_name">LookingKsas</string>
+    <string name="open_nav">Open Navigation drawer</string>
+    <string name="close_nav">Close navigation drawer</string>
+
+    <string name="patio">Yard:</string>
+    <string name="balcon">Balcony:</string>
+    <string name="barrio">Neighborhood:</string>
+    <string name="m">m²:</string>
+    <string name="dormitorios">Bedrooms:</string>
+    <string name="banos">Bathrooms:</string>
+    <string name="garage">Garage:</string>
+    <string name="parrillero">Grill:</string>
+    <string name="search_title">Search</string>
+    <string name="filter_search">Filter</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="configuracion">Configuration</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="terms">Terms and Conditions</string>
+    <string name="ayuda">Help</string>
+    <string name="inicio">Home</string>
+    <string name="buscar">Search</string>
+    <string name="favoritos">Favorites</string>
+</resources>
