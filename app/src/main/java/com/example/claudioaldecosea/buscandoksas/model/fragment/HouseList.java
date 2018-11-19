@@ -1,23 +1,21 @@
 package com.example.claudioaldecosea.buscandoksas.model.fragment;
 
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.example.claudioaldecosea.buscandoksas.R;
 import com.example.claudioaldecosea.buscandoksas.domain.House;
@@ -34,6 +32,8 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     private String mode = "";
     boolean isDualPane;
     int mSelectedPosition = 0;
+    private MenuItem search;
+    private static final String MODE_SEARCH = "search";
 
     public HouseList() {
     }
@@ -130,5 +130,27 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.activity_bar_menu_house_list, menu);
+
+        //Obtengo la referencia al SearchView
+        search = menu.findItem(R.id.search);
+        SearchView sv = (SearchView)search.getActionView();
+
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String userInput = new String(query.getBytes());
+                Bundle bundle = new Bundle();
+                bundle.putString("mode", MODE_SEARCH);
+                HouseList houseList = new HouseList();
+                houseList.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, houseList).commit();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 }

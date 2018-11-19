@@ -6,15 +6,15 @@
     android:orientation="horizontal">
 
     <FrameLayout
-        android:id="@+id/house_list_land_fragment"
-        android:layout_width="0px"
+        android:id="@+id/home_fragments_container"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="?android:attr/detailsElementBackground" />
 
     <FrameLayout
         android:id="@+id/house_detail_land_fragment"
-        android:layout_width="0px"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="?android:attr/detailsElementBackground" />

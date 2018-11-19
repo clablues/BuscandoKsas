@@ -234,6 +234,7 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         if(facebookListener.isFacebookLoggedIn()) {
             this.menu = menu;
             inflater.inflate(R.menu.activity_bar_menu_house_detail, menu);

@@ -16,6 +16,7 @@ public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
     private static final String LISTADO_FAVORITOS = "http://173.233.86.183:8080/CursoAndroidWebApp/rest/listadoFavoritos";
     private static final String MODE_HOME = "home";
     private static final String MODE_FAVORITES = "favorites";
+    private static final String MODE_SEARCH = "search";
 
     public GetHousesAsyncTask(Context context, String mode) {
         super(context);
@@ -35,6 +36,13 @@ public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
             case MODE_FAVORITES: {
                 String postData = "{}";
                 NetworkUtil netUtils = new NetworkUtil(LISTADO_FAVORITOS);
+                ArrayList<House> houses = netUtils.getHouses(postData);
+                return houses;
+            }
+
+            case MODE_SEARCH:{
+                NetworkUtil netUtils = new NetworkUtil(BUSCAR_INMUEBLES);
+                String postData = "{\"MaxResults\":2,\"Barrio\":\"\",\"Precio\":\"\",\"CantDormitorio\":\"\",\"TieneParrillero\":\"\",\"TieneGarage\":\"\",\"TieneBalcon\":\"\",\"TienePatio\":\"\"}";
                 ArrayList<House> houses = netUtils.getHouses(postData);
                 return houses;
             }
