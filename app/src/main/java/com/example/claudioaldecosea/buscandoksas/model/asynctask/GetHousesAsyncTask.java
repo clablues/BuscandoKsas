@@ -8,6 +8,7 @@ import com.example.claudioaldecosea.buscandoksas.domain.House;
 import com.example.claudioaldecosea.buscandoksas.model.network.NetworkUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
 
@@ -18,9 +19,20 @@ public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
     private static final String MODE_FAVORITES = "favorites";
     private static final String MODE_SEARCH = "search";
 
+    private HashMap<String,String> extraParams;
+
+    public HashMap<String,String> getExtraParams() {
+        return extraParams;
+    }
+
+    public void setExtraParams(HashMap<String,String> extraParams) {
+        this.extraParams = extraParams;
+    }
+
     public GetHousesAsyncTask(Context context, String mode) {
         super(context);
         this.mode = mode;
+        extraParams = new HashMap<String,String>();
     }
 
     @Override
@@ -42,6 +54,7 @@ public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
 
             case MODE_SEARCH:{
                 NetworkUtil netUtils = new NetworkUtil(BUSCAR_INMUEBLES);
+                String userSearch = extraParams.get("userSearch");
                 String postData = "{\"MaxResults\":2,\"Barrio\":\"\",\"Precio\":\"\",\"CantDormitorio\":\"\",\"TieneParrillero\":\"\",\"TieneGarage\":\"\",\"TieneBalcon\":\"\",\"TienePatio\":\"\"}";
                 ArrayList<House> houses = netUtils.getHouses(postData);
                 return houses;

@@ -10,6 +10,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ import com.example.claudioaldecosea.buscandoksas.model.adapter.RecycleViewClickL
 import com.example.claudioaldecosea.buscandoksas.model.asynctask.GetHousesAsyncTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<House>> {
     private RecyclerView mHouseListRecycleView;
@@ -34,6 +36,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     int mSelectedPosition = 0;
     private MenuItem search;
     private static final String MODE_SEARCH = "search";
+    private String userSearch;
 
     public HouseList() {
     }
@@ -50,6 +53,9 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
 
         if (bundle != null) {
             mode = this.getArguments().getString("mode");
+            if (mode == MODE_SEARCH) {
+                userSearch = this.getArguments().getString("userInput");
+            }
         }
 
         RecycleViewClickListener recycleViewListener = new RecycleViewClickListener() {
@@ -62,9 +68,9 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
                 HouseDetail houseDetail = new HouseDetail();
                 houseDetail.setArguments(bundle);
 
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.house_detail_land_fragment, houseDetail).commit();
-                }else {
+                } else {
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.home_fragments_container, houseDetail)
@@ -109,7 +115,16 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     @NonNull
     @Override
     public Loader<ArrayList<House>> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new GetHousesAsyncTask(getContext(), mode);
+        GetHousesAsyncTask housesAsyncTask = new GetHousesAsyncTask(getContext(), mode);
+        if (mode == MODE_SEARCH) {
+            userSearch = this.getArguments().getString("userInput");
+            HashMap<String,String> searchParams = new HashMap<>();
+            searchParams.put("userSearch",userSearch);
+            housesAsyncTask.setExtraParams(searchParams);
+            return housesAsyncTask;
+        }
+
+        return housesAsyncTask;
     }
 
     @Override
@@ -133,7 +148,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
 
         //Obtengo la referencia al SearchView
         search = menu.findItem(R.id.search);
-        SearchView sv = (SearchView)search.getActionView();
+        SearchView sv = (SearchView) search.getActionView();
 
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -141,6 +156,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
                 String userInput = new String(query.getBytes());
                 Bundle bundle = new Bundle();
                 bundle.putString("mode", MODE_SEARCH);
+                bundle.putString("userInput", userInput);
                 HouseList houseList = new HouseList();
                 houseList.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, houseList).commit();
