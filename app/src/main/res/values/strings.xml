@@ -25,4 +25,6 @@
     <string name="inicio">Inicio</string>
     <string name="buscar">Buscar</string>
     <string name="favoritos">Favoritos</string>
+    <string name="apply">Apply</string>
+    <string name="close_filter_btn">X</string>
 </resources>

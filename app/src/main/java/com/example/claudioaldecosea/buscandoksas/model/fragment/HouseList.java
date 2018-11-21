@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +38,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     private MenuItem search;
     private static final String MODE_SEARCH = "search";
     private String userSearch;
+    private MenuItem filter;
 
     public HouseList() {
     }
@@ -168,5 +170,21 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
                 return false;
             }
         });
+
+        filter = menu.findItem(R.id.filter);
+
+        filter.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                showEditDialog();
+                return true;
+            }
+        });
+    }
+
+    private void showEditDialog() {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        FilterSearch filterSearch = FilterSearch.newInstance("Some Title");
+        filterSearch.show(fm, "fragment_edit_name");
     }
 }
