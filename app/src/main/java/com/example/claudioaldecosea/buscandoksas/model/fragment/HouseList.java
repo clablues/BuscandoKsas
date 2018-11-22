@@ -1,5 +1,6 @@
 package com.example.claudioaldecosea.buscandoksas.model.fragment;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +12,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +26,6 @@ import com.example.claudioaldecosea.buscandoksas.model.adapter.RecycleViewClickL
 import com.example.claudioaldecosea.buscandoksas.model.asynctask.GetHousesAsyncTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<House>> {
     private RecyclerView mHouseListRecycleView;
@@ -39,6 +38,8 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     private static final String MODE_SEARCH = "search";
     private String userSearch;
     private MenuItem filter;
+    private static final int REQ_CODE_FILTER_SEARCH = 3;
+    Bundle dataSearchBundle = new Bundle();
 
     public HouseList() {
     }
@@ -55,9 +56,6 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
 
         if (bundle != null) {
             mode = this.getArguments().getString("mode");
-            if (mode == MODE_SEARCH) {
-                userSearch = this.getArguments().getString("userInput");
-            }
         }
 
         RecycleViewClickListener recycleViewListener = new RecycleViewClickListener() {
@@ -119,10 +117,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     public Loader<ArrayList<House>> onCreateLoader(int i, @Nullable Bundle bundle) {
         GetHousesAsyncTask housesAsyncTask = new GetHousesAsyncTask(getContext(), mode);
         if (mode == MODE_SEARCH) {
-            userSearch = this.getArguments().getString("userInput");
-            HashMap<String,String> searchParams = new HashMap<>();
-            searchParams.put("userSearch",userSearch);
-            housesAsyncTask.setExtraParams(searchParams);
+            housesAsyncTask.setExtraParams(this.getArguments());
             return housesAsyncTask;
         }
 
@@ -156,11 +151,10 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String userInput = new String(query.getBytes());
-                Bundle bundle = new Bundle();
-                bundle.putString("mode", MODE_SEARCH);
-                bundle.putString("userInput", userInput);
+                dataSearchBundle.putString("mode", MODE_SEARCH);
+                dataSearchBundle.putString("userInput", userInput);
                 HouseList houseList = new HouseList();
-                houseList.setArguments(bundle);
+                houseList.setArguments(dataSearchBundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, houseList).commit();
                 return true;
             }
@@ -184,7 +178,14 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
 
     private void showEditDialog() {
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        FilterSearch filterSearch = FilterSearch.newInstance("Some Title");
+        FilterSearch filterSearch = FilterSearch.newInstance("Filter Search", dataSearchBundle);
+        filterSearch.setTargetFragment(this, REQ_CODE_FILTER_SEARCH);
         filterSearch.show(fm, "fragment_edit_name");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        dataSearchBundle = data.getExtras();
     }
 }

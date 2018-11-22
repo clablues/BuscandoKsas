@@ -1,14 +1,13 @@
 package com.example.claudioaldecosea.buscandoksas.model.asynctask;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 
 import com.example.claudioaldecosea.buscandoksas.domain.House;
 import com.example.claudioaldecosea.buscandoksas.model.network.NetworkUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
 
@@ -19,20 +18,20 @@ public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
     private static final String MODE_FAVORITES = "favorites";
     private static final String MODE_SEARCH = "search";
 
-    private HashMap<String,String> extraParams;
+    private Bundle extraParams;
 
-    public HashMap<String,String> getExtraParams() {
+    public Bundle getExtraParams() {
         return extraParams;
     }
 
-    public void setExtraParams(HashMap<String,String> extraParams) {
+    public void setExtraParams(Bundle extraParams) {
         this.extraParams = extraParams;
     }
 
     public GetHousesAsyncTask(Context context, String mode) {
         super(context);
         this.mode = mode;
-        extraParams = new HashMap<String,String>();
+        extraParams = new Bundle();
     }
 
     @Override
@@ -54,8 +53,11 @@ public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
 
             case MODE_SEARCH:{
                 NetworkUtil netUtils = new NetworkUtil(BUSCAR_INMUEBLES);
-                String userSearch = extraParams.get("userSearch");
-                String postData = "{\"MaxResults\":1000,\"Barrio\":\""+ userSearch + "\",\"Precio\":\"\",\"CantDormitorio\":\"\",\"TieneParrillero\":\"\",\"TieneGarage\":\"\",\"TieneBalcon\":\"\",\"TienePatio\":\"\"}";
+                String userSearch = extraParams.getString("userInput");
+                Boolean hasGarage = extraParams.getBoolean("hasGarageUserInput");
+                Boolean hasGrill = extraParams.getBoolean("hasGrillUserInput");
+
+                String postData = "{\"MaxResults\":1000,\"Barrio\":\""+ userSearch + "\",\"Precio\":\"\",\"CantDormitorio\":\"\",\"TieneParrillero\":\"" + hasGrill + "\",\"TieneGarage\":\"" + hasGarage + "\",\"TieneBalcon\":\"\",\"TienePatio\":\"\"}";
                 ArrayList<House> houses = netUtils.getHouses(postData);
                 return houses;
             }
