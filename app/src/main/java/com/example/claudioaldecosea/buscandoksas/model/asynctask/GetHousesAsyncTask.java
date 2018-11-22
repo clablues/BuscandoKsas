@@ -54,10 +54,11 @@ public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
             case MODE_SEARCH:{
                 NetworkUtil netUtils = new NetworkUtil(BUSCAR_INMUEBLES);
                 String userSearch = extraParams.getString("userInput");
-                Boolean hasGarage = extraParams.getBoolean("hasGarageUserInput");
-                Boolean hasGrill = extraParams.getBoolean("hasGrillUserInput");
+                String hasGarage = extraParams.getString("hasGarageUserInput");
+                String hasGrill = extraParams.getString("hasGrillUserInput");
+                String bedroomsQty = extraParams.getString("bedroomsQty");
 
-                String postData = "{\"MaxResults\":1000,\"Barrio\":\""+ userSearch + "\",\"Precio\":\"\",\"CantDormitorio\":\"\",\"TieneParrillero\":\"" + hasGrill + "\",\"TieneGarage\":\"" + hasGarage + "\",\"TieneBalcon\":\"\",\"TienePatio\":\"\"}";
+                String postData = "{\"MaxResults\":1000,\"Barrio\":\""+ userSearch + "\",\"Precio\":\"\",\"CantDormitorio\":\""+ bedroomsQty + "\",\"TieneParrillero\":\"" + hasGrill + "\",\"TieneGarage\":\"" + hasGarage + "\",\"TieneBalcon\":\"\",\"TienePatio\":\"\"}";
                 ArrayList<House> houses = netUtils.getHouses(postData);
                 return houses;
             }

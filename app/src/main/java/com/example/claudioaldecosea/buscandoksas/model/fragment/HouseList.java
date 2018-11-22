@@ -32,11 +32,8 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     private HouseListAdapter mHouseListAdapter;
     private ArrayList<House> mHousesList = new ArrayList<>();
     private String mode = "";
-    boolean isDualPane;
-    int mSelectedPosition = 0;
     private MenuItem search;
     private static final String MODE_SEARCH = "search";
-    private String userSearch;
     private MenuItem filter;
     private static final int REQ_CODE_FILTER_SEARCH = 3;
     Bundle dataSearchBundle = new Bundle();

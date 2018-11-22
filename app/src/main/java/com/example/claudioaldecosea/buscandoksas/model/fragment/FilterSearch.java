@@ -14,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 
 import com.example.claudioaldecosea.buscandoksas.R;
+import com.google.zxing.common.StringUtils;
 
 public class FilterSearch extends DialogFragment implements View.OnClickListener {
 
@@ -27,6 +28,7 @@ public class FilterSearch extends DialogFragment implements View.OnClickListener
     private Button two_room_btn;
     private Button three_room_btn;
     private Button four_room_btn;
+    Intent userFilterSearch = new Intent();
 
     public FilterSearch() {
         // Empty constructor is required for DialogFragment
@@ -82,11 +84,10 @@ public class FilterSearch extends DialogFragment implements View.OnClickListener
         four_room_btn = dialog.findViewById(R.id.four_room);
         four_room_btn.setOnClickListener(this);
 
-        // Fetch arguments from bundle and set title
-        String title = getArguments().getString("title", "Enter Name");
+        // Fetch arguments from bundle
         Boolean hasGarageValue = getArguments().getBoolean("hasGarageUserInput");
         Boolean hasGrillValue = getArguments().getBoolean("hasGrillUserInput");
-        getDialog().setTitle(title);
+
         hasGarage.setChecked(hasGarageValue);
         hasGrill.setChecked(hasGrillValue);
 
@@ -96,11 +97,16 @@ public class FilterSearch extends DialogFragment implements View.OnClickListener
             public void onClick(View v) {
                 //Aca tengo los datos que el usuario coloco en el filtro
                 //los tengo que guardar y pasar al fragment de HouseList o a la activity
-                Boolean hasGrillUserInput = hasGrill.isChecked();
-                Boolean hasGarageUserInput = hasGarage.isChecked();
-                Intent userFilterSearch = new Intent();
-                userFilterSearch.putExtra("hasGrillUserInput",hasGrillUserInput);
-                userFilterSearch.putExtra("hasGarageUserInput", hasGarageUserInput);
+                String hasGrillUserInput = String.valueOf(hasGrill.isChecked());
+                String hasGarageUserInput = String.valueOf(hasGarage.isChecked());
+
+                if(hasGrill.isChecked()) {
+                    userFilterSearch.putExtra("hasGrillUserInput", hasGrillUserInput);
+                }
+
+                if(hasGarage.isChecked()) {
+                    userFilterSearch.putExtra("hasGarageUserInput", hasGarageUserInput);
+                }
 
                 getTargetFragment().onActivityResult(1,200,userFilterSearch);
                 dismiss();
@@ -133,8 +139,15 @@ public class FilterSearch extends DialogFragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        Button selectedBtn = v.findViewById(v.getId());
+        //Si el usuario quita el seleccionado entonces lo quito del bundle
+        if(!selectedBtn.isSelected()){
+            userFilterSearch.putExtra("bedroomsQty",selectedBtn.getText());
+        }else{
+            userFilterSearch.removeExtra("bedroomsQty");
+        }
 
+        switch (v.getId()) {
             case R.id.one_room:
                 one_room_btn.setSelected(!one_room_btn.isSelected());
                 two_room_btn.setSelected(false);
