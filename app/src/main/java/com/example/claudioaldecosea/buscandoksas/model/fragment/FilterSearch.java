@@ -67,13 +67,6 @@ public class FilterSearch extends DialogFragment {
         Dialog dialog = getDialog();
 
         if (dialog != null) {
-            /*
-            int width = WindowManager.LayoutParams.MATCH_PARENT;
-            int height = WindowManager.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);
-            */
-            //this line is what you need:
-            //dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             Window window = dialog.getWindow();
             window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -83,7 +76,8 @@ public class FilterSearch extends DialogFragment {
         priceBar.setTextFormatter(new UruguayTextFormatter());
         priceBar.setMax(1000000);
         priceBar.addStep(new Slidr.Step("media", 500000, Color.parseColor("#405959"), Color.parseColor("#405959")));
-        priceBar.setTextMax("max\nvalue");
+        priceBar.setTextMax("max");
+        priceBar.setTextMin("min");
 
         String userPriceInput = getArguments().getString("price");
         if (userPriceInput != null) {
@@ -108,12 +102,9 @@ public class FilterSearch extends DialogFragment {
         roomNumber.setMinValue(0);
         roomNumber.setMaxValue(10);
 
-        // Fetch arguments from bundle
-
+        // Obtengo parametros preseteados desde el bundle
         Boolean hasGarageValue = Boolean.valueOf(getArguments().getString("hasGarageUserInput"));
         Boolean hasGrillValue = Boolean.valueOf(getArguments().getString("hasGrillUserInput"));
-
-        //TODO Aca setear el valor que me venga en el getArguments para el NumberPicker
 
         hasGarage.setChecked(hasGarageValue);
         hasGrill.setChecked(hasGrillValue);
@@ -146,8 +137,8 @@ public class FilterSearch extends DialogFragment {
                 }
 
                 //En la busqueda por filtro no aplica el barrio
+                //TODO Ver si involucro el barrio si esta seteado en la busqueda
                 userFilterSearch.putExtra("barrio", "");
-                //TODO Ver si esta linea es necesaria...
                 userFilterSearch.putExtra("mode", "search");
 
                 getTargetFragment().onActivityResult(1, 200, userFilterSearch);
