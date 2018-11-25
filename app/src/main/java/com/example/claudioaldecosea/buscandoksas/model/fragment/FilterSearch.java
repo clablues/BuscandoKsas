@@ -2,6 +2,7 @@ package com.example.claudioaldecosea.buscandoksas.model.fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -10,24 +11,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SeekBar;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 
 import com.example.claudioaldecosea.buscandoksas.R;
-import com.google.zxing.common.StringUtils;
+import com.github.florent37.androidslidr.Slidr;
 
-public class FilterSearch extends DialogFragment implements View.OnClickListener {
+public class FilterSearch extends DialogFragment {
 
-    private SeekBar priceBar;
+    private Slidr priceBar;
     private Switch hasGrill;
     private Switch hasGarage;
     private Button applyFilter;
     private Button closeFilter;
     private View layout;
-    private Button one_room_btn;
-    private Button two_room_btn;
-    private Button three_room_btn;
-    private Button four_room_btn;
+    private NumberPicker roomNumber;
     Intent userFilterSearch = new Intent();
 
     public FilterSearch() {
@@ -71,25 +69,46 @@ public class FilterSearch extends DialogFragment implements View.OnClickListener
             dialog.getWindow().setLayout(width, height);
         }
 
-        priceBar = dialog.findViewById(R.id.seekBar);
+        priceBar = dialog.findViewById(R.id.slidr);
+        priceBar.setTextFormatter(new UruguayTextFormatter());
+        priceBar.setMax(1000000);
+        priceBar.addStep(new Slidr.Step("media", 500000, Color.parseColor("#405959"), Color.parseColor("#405959")));
+        priceBar.setTextMax("max\nvalue");
+
+        String userPriceInput = getArguments().getString("price");
+        if (userPriceInput != null) {
+            priceBar.setCurrentValue(Integer.valueOf(userPriceInput));
+        }else{
+            priceBar.setCurrentValue(0);
+        }
+
+        priceBar.setListener(new Slidr.Listener() {
+            @Override
+            public void valueChanged(Slidr slidr, float currentValue) {
+            }
+
+            @Override
+            public void bubbleClicked(Slidr slidr) {
+            }
+        });
+
         hasGrill = dialog.findViewById(R.id.switch_parrillero);
         hasGarage = dialog.findViewById(R.id.switch_garage);
-
-        one_room_btn = dialog.findViewById(R.id.one_room);
-        one_room_btn.setOnClickListener(this); // calling onClick() method
-        two_room_btn = dialog.findViewById(R.id.two_room);
-        two_room_btn.setOnClickListener(this);
-        three_room_btn = dialog.findViewById(R.id.three_room);
-        three_room_btn.setOnClickListener(this);
-        four_room_btn = dialog.findViewById(R.id.four_room);
-        four_room_btn.setOnClickListener(this);
+        roomNumber = dialog.findViewById(R.id.numberpicker);
+        roomNumber.setMinValue(0);
+        roomNumber.setMaxValue(10);
 
         // Fetch arguments from bundle
-        Boolean hasGarageValue = getArguments().getBoolean("hasGarageUserInput");
-        Boolean hasGrillValue = getArguments().getBoolean("hasGrillUserInput");
+
+        Boolean hasGarageValue = Boolean.valueOf(getArguments().getString("hasGarageUserInput"));
+        Boolean hasGrillValue = Boolean.valueOf(getArguments().getString("hasGrillUserInput"));
+
+        //TODO Aca setear el valor que me venga en el getArguments para el NumberPicker
 
         hasGarage.setChecked(hasGarageValue);
         hasGrill.setChecked(hasGrillValue);
+
+        roomNumber.setValue(getArguments().getInt("bedroomsQty"));
 
         applyFilter = dialog.findViewById(R.id.apply_filter_button);
         applyFilter.setOnClickListener(new View.OnClickListener() {
@@ -97,18 +116,31 @@ public class FilterSearch extends DialogFragment implements View.OnClickListener
             public void onClick(View v) {
                 //Aca tengo los datos que el usuario coloco en el filtro
                 //los tengo que guardar y pasar al fragment de HouseList o a la activity
+
                 String hasGrillUserInput = String.valueOf(hasGrill.isChecked());
                 String hasGarageUserInput = String.valueOf(hasGarage.isChecked());
 
-                if(hasGrill.isChecked()) {
+                String price = String.valueOf((int) priceBar.getCurrentValue());
+                userFilterSearch.putExtra("price", price);
+
+                if (hasGrill.isChecked()) {
                     userFilterSearch.putExtra("hasGrillUserInput", hasGrillUserInput);
                 }
 
-                if(hasGarage.isChecked()) {
+                if (hasGarage.isChecked()) {
                     userFilterSearch.putExtra("hasGarageUserInput", hasGarageUserInput);
                 }
 
-                getTargetFragment().onActivityResult(1,200,userFilterSearch);
+                if(roomNumber.getValue() != 0){
+                    userFilterSearch.putExtra("bedroomsQty", roomNumber.getValue());
+                }
+
+                //En la busqueda por filtro no aplica el barrio
+                userFilterSearch.putExtra("barrio", "");
+                //TODO Ver si esta linea es necesaria...
+                userFilterSearch.putExtra("mode", "search");
+
+                getTargetFragment().onActivityResult(1, 200, userFilterSearch);
                 dismiss();
             }
         });
@@ -137,47 +169,11 @@ public class FilterSearch extends DialogFragment implements View.OnClickListener
         return dialog;
     }
 
-    @Override
-    public void onClick(View v) {
-        Button selectedBtn = v.findViewById(v.getId());
-        //Si el usuario quita el seleccionado entonces lo quito del bundle
-        if(!selectedBtn.isSelected()){
-            userFilterSearch.putExtra("bedroomsQty",selectedBtn.getText());
-        }else{
-            userFilterSearch.removeExtra("bedroomsQty");
-        }
+    public class UruguayTextFormatter implements Slidr.TextFormatter {
 
-        switch (v.getId()) {
-            case R.id.one_room:
-                one_room_btn.setSelected(!one_room_btn.isSelected());
-                two_room_btn.setSelected(false);
-                three_room_btn.setSelected(false);
-                four_room_btn.setSelected(false);
-                break;
-
-            case R.id.two_room:
-                two_room_btn.setSelected(!two_room_btn.isSelected());
-                one_room_btn.setSelected(false);
-                three_room_btn.setSelected(false);
-                four_room_btn.setSelected(false);
-                break;
-
-            case R.id.three_room:
-                three_room_btn.setSelected(!three_room_btn.isSelected());
-                one_room_btn.setSelected(false);
-                two_room_btn.setSelected(false);
-                four_room_btn.setSelected(false);
-                break;
-
-            case R.id.four_room:
-                four_room_btn.setSelected(!four_room_btn.isSelected());
-                one_room_btn.setSelected(false);
-                two_room_btn.setSelected(false);
-                three_room_btn.setSelected(false);
-                break;
-
-            default:
-                break;
+        @Override
+        public String format(float value) {
+            return String.format("%d $U", (int) value);
         }
     }
 }

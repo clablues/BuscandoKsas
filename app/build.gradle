@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -37,4 +41,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:+'
     implementation 'com.google.android.gms:play-services-maps:+'
     implementation 'com.google.android.gms:play-services-location:+'
+    implementation 'com.github.florent37:android-slidr:1.0.3'
+
+
 }

@@ -27,4 +27,5 @@
     <string name="favoritos">Favoritos</string>
     <string name="apply">Apply</string>
     <string name="close_filter_btn">X</string>
+    <string name="long_text">Long text</string>
 </resources>

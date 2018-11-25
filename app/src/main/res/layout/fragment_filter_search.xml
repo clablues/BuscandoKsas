@@ -35,14 +35,31 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <SeekBar
-        android:id="@+id/seekBar"
+
+    <com.github.florent37.androidslidr.Slidr
+        android:id="@+id/slidr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="500000"
-        android:progress="1000"
-        android:textColor="#fff"
-        android:thumbTint="@color/colorPrimary" />
+        app:slidr_region_leftColor="#4CAF50"
+        app:slidr_step_colorizeAfterLast="true" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:gravity="bottom"
+        android:text="@string/long_text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/fluidSlider"
+        app:layout_constraintEnd_toEndOf="@+id/fluidSlider"
+        app:layout_constraintStart_toStartOf="@+id/fluidSlider"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <!--
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,12 +70,12 @@
             android:id="@+id/one_room"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="62dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/round_button"
             android:gravity="center_vertical|center_horizontal"
             android:text="1"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="62dp"
-            android:layout_marginTop="10dp"
             android:textColor="#ffffff" />
 
         <Button
@@ -96,23 +113,39 @@
 
     </LinearLayout>
 
+    -->
+
+    <TextView
+        android:id="@+id/numberview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cantidad de habitaciones:"
+        android:textSize="@dimen/text_size"
+        android:layout_gravity="center"
+        android:textStyle="bold" />
+
+    <NumberPicker
+        android:id="@+id/numberpicker"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
     <Switch
         android:id="@+id/switch_parrillero"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
         android:text="Con Parrillero"
-        android:textColor="#000000"/>
+        android:textColor="#000000" />
 
     <Switch
         android:id="@+id/switch_garage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:text="Con garage"
-        android:textColor="#000000"/>
+        android:textColor="#000000" />
 </LinearLayout>

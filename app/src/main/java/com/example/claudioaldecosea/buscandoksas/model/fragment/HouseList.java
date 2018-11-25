@@ -36,7 +36,8 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     private static final String MODE_SEARCH = "search";
     private MenuItem filter;
     private static final int REQ_CODE_FILTER_SEARCH = 3;
-    Bundle dataSearchBundle = new Bundle();
+    private SearchView sv;
+    private Bundle dataSearchBundle = new Bundle();
 
     public HouseList() {
     }
@@ -51,9 +52,11 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
 
         setHasOptionsMenu(true);
 
+        /*
         if (bundle != null) {
             mode = this.getArguments().getString("mode");
         }
+        */
 
         RecycleViewClickListener recycleViewListener = new RecycleViewClickListener() {
             @Override
@@ -86,7 +89,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mHouseListRecycleView.setLayoutManager(linearLayoutManager);
 
-        startTask();
+        startTask(bundle);
 
         return layout;
     }
@@ -101,20 +104,20 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
         super.onStop();
     }
 
-    //Sobre escritura de metodos por implementar la interfasz Loader
-    //Ver en este caso como es el tema ya que las imagenes se cargan de una sin interaccion del usuario.
-    //Tampoco tengo parametros para pasar en el bundle.
-    private void startTask() {
-        Bundle queryBundle = new Bundle();
-        getActivity().getSupportLoaderManager().restartLoader(0, queryBundle, this);
+    private void startTask(Bundle dataBundle) {
+        if(dataBundle == null) {
+            dataBundle = new Bundle();
+        }
+        getActivity().getSupportLoaderManager().restartLoader(0, dataBundle, this);
     }
 
     @NonNull
     @Override
     public Loader<ArrayList<House>> onCreateLoader(int i, @Nullable Bundle bundle) {
+        String mode = bundle.getString("mode");
         GetHousesAsyncTask housesAsyncTask = new GetHousesAsyncTask(getContext(), mode);
         if (mode == MODE_SEARCH) {
-            housesAsyncTask.setExtraParams(this.getArguments());
+            housesAsyncTask.setExtraParams(bundle);
             return housesAsyncTask;
         }
 
@@ -142,17 +145,18 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
 
         //Obtengo la referencia al SearchView
         search = menu.findItem(R.id.search);
-        SearchView sv = (SearchView) search.getActionView();
+        sv = (SearchView) search.getActionView();
 
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String userInput = new String(query.getBytes());
+                dataSearchBundle.clear();
                 dataSearchBundle.putString("mode", MODE_SEARCH);
-                dataSearchBundle.putString("userInput", userInput);
-                HouseList houseList = new HouseList();
-                houseList.setArguments(dataSearchBundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, houseList).commit();
+                dataSearchBundle.putString("barrio", userInput);
+
+                startTask(dataSearchBundle);
+                sv.clearFocus();
                 return true;
             }
 
@@ -184,5 +188,6 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         dataSearchBundle = data.getExtras();
+        startTask(dataSearchBundle);
     }
 }
