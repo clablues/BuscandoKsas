@@ -59,62 +59,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <!--
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/one_room"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="62dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/round_button"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="1"
-            android:textColor="#ffffff" />
-
-        <Button
-            android:id="@+id/two_room"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/round_button"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="2"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:textColor="#ffffff" />
-
-        <Button
-            android:id="@+id/three_room"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/round_button"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="3"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:textColor="#ffffff" />
-
-        <Button
-            android:id="@+id/four_room"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/round_button"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="4"
-
-            android:layout_marginTop="10dp"
-            android:textColor="#ffffff" />
-
-    </LinearLayout>
-
-    -->
-
     <TextView
         android:id="@+id/numberview"
         android:layout_width="wrap_content"
