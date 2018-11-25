@@ -25,7 +25,10 @@
     <string name="inicio">Inicio</string>
     <string name="buscar">Buscar</string>
     <string name="favoritos">Favoritos</string>
-    <string name="apply">Apply</string>
+    <string name="apply">Aplicar</string>
     <string name="close_filter_btn">X</string>
-    <string name="long_text">Long text</string>
+
+    <string name="cantidad_de_habitaciones">Cantidad de habitaciones:</string>
+    <string name="con_parrillero">Con Parrillero</string>
+    <string name="con_garage">Con garage</string>
 </resources>

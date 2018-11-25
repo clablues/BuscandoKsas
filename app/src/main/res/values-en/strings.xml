@@ -25,4 +25,10 @@
     <string name="inicio">Home</string>
     <string name="buscar">Search</string>
     <string name="favoritos">Favorites</string>
+
+    <string name="apply">Apply</string>
+    <string name="cantidad_de_habitaciones">Room number:</string>
+    <string name="con_parrillero">With Grill:</string>
+    <string name="con_garage">With garage:</string>
+
 </resources>
