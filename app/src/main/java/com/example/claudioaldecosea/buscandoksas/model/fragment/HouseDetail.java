@@ -296,7 +296,7 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
     @NonNull
     @Override
     public Loader<Boolean> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new AddToFavoritesAsyncTask(getContext(), Integer.valueOf(mData.getInmuebleId()));
+        return new AddToFavoritesAsyncTask(getContext(), Integer.valueOf(mData.getInmuebleId()), facebookListener.getFacebookUserId());
     }
 
     @Override

@@ -110,10 +110,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
     public Loader<ArrayList<House>> onCreateLoader(int i, @Nullable Bundle bundle) {
         String mode = bundle.getString("mode");
         GetHousesAsyncTask housesAsyncTask = new GetHousesAsyncTask(getContext(), mode);
-        if (mode == MODE_SEARCH) {
-            housesAsyncTask.setExtraParams(bundle);
-            return housesAsyncTask;
-        }
+        housesAsyncTask.setExtraParams(bundle);
 
         return housesAsyncTask;
     }

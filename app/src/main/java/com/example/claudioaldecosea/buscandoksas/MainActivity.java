@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private static final String MODE_HOME = "home";
     private static final String MODE_FAVORITES = "favorites";
-    private MenuItem search;
+    private static final String SHARED_PREFERENCE_FACEBOOK_ID = "facebook_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.favoritos: {
                 Bundle bundle = new Bundle();
                 bundle.putString("mode", MODE_FAVORITES);
+                bundle.putString("userId",getFacebookUserId());
                 HouseList houseList = new HouseList();
                 houseList.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.home_fragments_container, houseList).commit();
@@ -124,6 +125,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
         return isLoggedIn;
+    }
+
+    @Override
+    public String getFacebookUserId() {
+        if (isFacebookLoggedIn()){
+            return AccessToken.getCurrentAccessToken().getUserId();
+        }else{
+            return "";
+        }
     }
 
     @Override

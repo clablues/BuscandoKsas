@@ -47,6 +47,7 @@ public class GetHousesAsyncTask extends AsyncTaskLoader<ArrayList<House>> {
             case MODE_FAVORITES: {
                 String postData = "{}";
                 NetworkUtil netUtils = new NetworkUtil(LISTADO_FAVORITOS);
+                netUtils.setAuthorization(extraParams.getString("userId"));
                 ArrayList<House> houses = netUtils.getHouses(postData);
                 return houses;
             }

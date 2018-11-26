@@ -3,13 +3,17 @@ package com.example.claudioaldecosea.buscandoksas.model.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.claudioaldecosea.buscandoksas.R;
+import com.example.claudioaldecosea.buscandoksas.model.asynctask.HouseApiAsyncTask;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -18,7 +22,7 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-public class FacebookLogin extends Fragment {
+public class FacebookLogin extends Fragment implements LoaderManager.LoaderCallbacks<Boolean> {
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     private FacebookLoginListener facebookListener;
@@ -72,6 +76,7 @@ public class FacebookLogin extends Fragment {
             public void onSuccess(LoginResult loginResult) {
                 facebookListener.showFavorites();
                 facebookListener.showLogout();
+                startTask();
             }
 
             @Override
@@ -113,9 +118,36 @@ public class FacebookLogin extends Fragment {
         accessTokenTracker.stopTracking();
     }
 
+    //******************** AsyncTaskLoader implement methods ********************
+
+    private void startTask() {
+        Bundle queryBundle = new Bundle();
+        getActivity().getSupportLoaderManager().restartLoader(0, queryBundle, this);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Boolean> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return new HouseApiAsyncTask(getContext(),facebookListener.getFacebookUserId());
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Boolean> loader, Boolean aBoolean) {
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Boolean> loader) {
+
+    }
+
+    //*******************************************************************************
+
     public interface FacebookLoginListener {
 
         boolean isFacebookLoggedIn();
+
+        String getFacebookUserId();
 
         void showFavorites();
 

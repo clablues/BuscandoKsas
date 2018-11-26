@@ -1,31 +1,30 @@
 package com.example.claudioaldecosea.buscandoksas.model.network;
 
 import android.net.Uri;
-import android.util.Base64;
-import android.util.Log;
 
 import com.example.claudioaldecosea.buscandoksas.domain.House;
 import com.example.claudioaldecosea.buscandoksas.domain.Houses;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class NetworkUtil {
 
     private HttpURLConnection urlConnection = null;
     private BufferedReader reader = null;
     private String BASE_URL;
+
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
+    }
+
+    private String authorization;
 
     public NetworkUtil(String BASE_URL) {
         this.BASE_URL = BASE_URL;
@@ -52,8 +51,14 @@ public class NetworkUtil {
         }
     }
 
+    public Boolean loginToHouseApi(String postData){
+        String response = doPost(BASE_URL,postData);
+        return true;
+    }
+
     public String doPost(String url, String postData) {
         String response = "{}";
+
         try {
             //agregar los parametros a la URL
             String finalURL = String.format(url);
@@ -64,8 +69,11 @@ public class NetworkUtil {
             urlConnection = (HttpURLConnection) requestURL.openConnection();
             //en este caso el metodo es POST
             urlConnection.setRequestMethod("POST");
-            String authorization = "123456";
-            urlConnection.setRequestProperty("Authorization", authorization);
+
+            if(authorization != null) {
+                urlConnection.setRequestProperty("Authorization", authorization);
+            }
+
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setDoOutput(true);
             urlConnection.getOutputStream().write(postData.getBytes());
