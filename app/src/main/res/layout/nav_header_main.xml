@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="BuscandoKsas"
+        android:text="@string/app_name"
         android:layout_margin="18dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textStyle="bold"/>
