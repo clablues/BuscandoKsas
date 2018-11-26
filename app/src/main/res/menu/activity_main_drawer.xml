@@ -11,11 +11,6 @@
             android:title="@string/inicio" />
 
         <item
-            android:id="@+id/buscar"
-            android:icon="@drawable/baseline_search_black_24"
-            android:title="@string/buscar" />
-
-        <item
             android:id="@+id/favoritos"
             android:icon="@drawable/baseline_favorite_black_24"
             android:title="@string/favoritos"
