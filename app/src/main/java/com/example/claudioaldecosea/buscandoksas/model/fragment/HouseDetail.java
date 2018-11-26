@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
+
 public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<Boolean> {
 
     public static String EXTRA_DATA = "extra_data";
@@ -51,6 +53,7 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
 
     private MapView mapView;
     private GoogleMap gmap;
+    private HashMap<String, LatLng> latLongUruguay = new HashMap<>();
     private Menu menu;
 
     private FacebookLogin.FacebookLoginListener facebookListener;
@@ -58,7 +61,13 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
     private OnFragmentInteractionListener mListener;
 
     public HouseDetail() {
-        // Required empty public constructor
+        latLongUruguay.put("buceo", new LatLng(-34.8989521, -56.1357377));
+        latLongUruguay.put("malvin", new LatLng(-34.8907837, -56.1142534));
+        latLongUruguay.put("cordón", new LatLng(-34.9007146, -56.179694));
+        latLongUruguay.put("parque batlle", new LatLng(-34.8949023, -56.1575033));
+        latLongUruguay.put("la figurita", new LatLng(-34.87492, -56.180403));
+        latLongUruguay.put("el pinar", new LatLng(-34.800412, -55.906291));
+        latLongUruguay.put("default", new LatLng(-34.902663, -56.106593));
     }
 
     @Override
@@ -71,7 +80,7 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
 
         Bundle bundle = this.getArguments();
 
-        if(bundle != null){
+        if (bundle != null) {
             // handle your code here.
             mData = (House) this.getArguments().get(EXTRA_DATA);
         }
@@ -216,14 +225,19 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gmap = googleMap;
+        LatLng location;
 
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34.8907837, -56.1142534);
-        gmap.addMarker(new MarkerOptions().position(sydney).title("Casa aqui!"));
+        if (latLongUruguay.containsKey(mData.getInmuebleBarrio().toLowerCase())) {
+            location = latLongUruguay.get(mData.getInmuebleBarrio().toLowerCase());
+        } else {
+            location = latLongUruguay.get("default");
+        }
+
+        gmap.addMarker(new MarkerOptions().position(location).title("Casa aqui!"));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(-34.8907837, -56.1142534))      // Sets the center of the map to location user
+                .target(location)      // Sets the center of the map to location user
                 .zoom(14)                   // Sets the zoom
                 .bearing(90)                // Sets the orientation of the camera to east
                 .tilt(40)                   // Sets the tilt of the camera to 30 degrees
@@ -234,7 +248,7 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        if(facebookListener.isFacebookLoggedIn()) {
+        if (facebookListener.isFacebookLoggedIn()) {
             this.menu = menu;
             inflater.inflate(R.menu.activity_bar_menu_house_detail, menu);
             if (mData.getFavorito().equals("true")) {
@@ -288,7 +302,7 @@ public class HouseDetail extends Fragment implements OnMapReadyCallback, LoaderM
     @Override
     public void onLoadFinished(@NonNull Loader<Boolean> loader, Boolean addedToFavorites) {
         //En caso de fallar el agregado a favoritos, vuelvo a quitar el corazon de favoritos
-        if (!addedToFavorites){
+        if (!addedToFavorites) {
             MenuItem isFavorite = menu.findItem(R.id.got_favorites_bar);
             isFavorite.setVisible(false);
             MenuItem addFavorite = menu.findItem(R.id.add_favorites_bar);
