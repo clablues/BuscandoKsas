@@ -137,7 +137,6 @@ public class FilterSearch extends DialogFragment {
                 }
 
                 //En la busqueda por filtro no aplica el barrio
-                //TODO Ver si involucro el barrio si esta seteado en la busqueda
                 userFilterSearch.putExtra("barrio", "");
                 userFilterSearch.putExtra("mode", "search");
 
