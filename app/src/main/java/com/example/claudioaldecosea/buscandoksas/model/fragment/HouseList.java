@@ -52,12 +52,6 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
 
         setHasOptionsMenu(true);
 
-        /*
-        if (bundle != null) {
-            mode = this.getArguments().getString("mode");
-        }
-        */
-
         RecycleViewClickListener recycleViewListener = new RecycleViewClickListener() {
             @Override
             public void onClick(View v, int pos) {
@@ -104,7 +98,7 @@ public class HouseList extends Fragment implements LoaderManager.LoaderCallbacks
         super.onStop();
     }
 
-    private void startTask(Bundle dataBundle) {
+    public void startTask(Bundle dataBundle) {
         if(dataBundle == null) {
             dataBundle = new Bundle();
         }
