@@ -28,7 +28,7 @@ public class HelpVideo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        String path = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.help;
+        String path = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.help_video;
 
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_help_video, container, false);
